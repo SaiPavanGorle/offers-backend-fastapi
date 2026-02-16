@@ -8,6 +8,7 @@ Production-ready MVP backend for proximity offers using FastAPI + PostgreSQL + S
 - PostgreSQL
 - SQLAlchemy 2.0 async
 - Alembic
+- psycopg2-binary (sync PostgreSQL driver for Alembic migrations)
 - Docker / Docker Compose
 
 ## Run with Docker
