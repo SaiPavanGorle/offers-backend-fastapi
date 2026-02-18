@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from uuid import uuid4
 
 from sqlalchemy import and_, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -40,15 +41,16 @@ async def get_active_campaign_for_store(db: AsyncSession, store_id: str) -> Camp
 
 
 async def create_enquiry(db: AsyncSession, payload: EnquiryCreate) -> Enquiry:
+    created_at = now_utc()
     enquiry = Enquiry(
-        enquiry_id=payload.enquiry_id,
+        enquiry_id=f"ENQ_{uuid4().hex[:16]}",
         store_id=payload.store_id,
         campaign_id=payload.campaign_id,
         device_anon_id=payload.device_anon_id,
-        message=payload.message,
-        status=payload.status,
-        created_at=payload.created_at,
-        server_received_at=now_utc(),
+        message=payload.message or "",
+        status="NEW",
+        created_at=created_at,
+        server_received_at=created_at,
     )
     db.add(enquiry)
     await db.commit()
